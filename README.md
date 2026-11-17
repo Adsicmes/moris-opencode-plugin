@@ -6,12 +6,14 @@ OpenCode v2 server plugin for **Moris LLMGateway**. It registers exactly one pro
 {
   "plugins": [
     {
-      "package": "@moris/opencode-plugin",
+      "package": "github:Adsicmes/moris-opencode-plugin#main",
       "options": { "baseUrl": "https://gateway.example.com", "apiKey": "设备密钥" }
     }
   ]
 }
 ```
+
+Or add the package entry with `opencode plugin add 'github:Adsicmes/moris-opencode-plugin#main'`, then add the two options to the resulting entry.
 
 - Model per protocol package: OpenAI Chat, OpenAI Responses, Anthropic Messages.
 - Subscription models cost 0; a fully stated USD token price maps directly. Complex, per-request, unknown, CNY or incomplete token prices stay callable with `cost: []` and a “（价格见网关）” name hint — never a fabricated zero, never hidden.
@@ -21,4 +23,4 @@ OpenCode v2 server plugin for **Moris LLMGateway**. It registers exactly one pro
 - Retry is forced off for `moris` only; WebSocket is disabled with `settings.transport: "http"`.
 - The device key is never stored in the catalog cache, and no user configuration file is written.
 
-Full behaviour, limitations and verification notes: [`docs/clients.md`](../../docs/clients.md).
+Full behaviour, limitations and verification notes: [`docs/clients.md`](https://github.com/Adsicmes/moris-llm-gateway/blob/main/docs/clients.md).
