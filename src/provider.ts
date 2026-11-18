@@ -51,6 +51,19 @@ export interface OpenCodeModelSpec {
 
 export interface OpenCodeProviderSettings {
   baseURL: string;
+  /**
+   * `false` states that this provider has no credential to resolve and
+   * authenticates through each model's static headers. `AuthOptions.apiKey`
+   * maps it to `Auth.none`; leaving it out leaves the route on
+   * `AuthOptions.bearer(undefined)`, which fails every request with
+   * "Missing auth credential: apiKey".
+   *
+   * OpenCode only drops that requirement on its own for packages in its
+   * no-auth allowlist. `openai-compatible` (chat) and `anthropic-compatible`
+   * are listed; `openai-compatible/responses` is not, so the subscription
+   * models would fail without this flag.
+   */
+  apiKey?: false;
   transport: 'http';
   headerTimeout: number;
   chunkTimeout: number;
@@ -203,6 +216,9 @@ export function modelSpecs(models: readonly CatalogModel[] | null, options: Spec
  * The single provider OpenCode registers. Base URL and transport are set
  * here; the device key travels on each model's Authorization header so an
  * existing user-owned `moris` provider keeps every other setting.
+ * `settings.apiKey: false` completes that contract: the provider carries no
+ * resolvable credential, so OpenCode must keep the static headers as its
+ * authentication instead of failing on a missing one.
  */
 export function providerInfo(options: {
   apiBase: string;
@@ -219,6 +235,7 @@ export function providerInfo(options: {
       baseURL: options.apiBase,
       // The gateway streams over HTTP only; this is the documented V2 switch.
       transport: 'http',
+      apiKey: false,
       headerTimeout: options.headerTimeoutMs,
       chunkTimeout: options.chunkTimeoutMs,
       timeout: options.requestTimeoutMs,

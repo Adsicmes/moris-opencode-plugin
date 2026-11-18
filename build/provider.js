@@ -123,6 +123,9 @@ export function modelSpecs(models, options) {
  * The single provider OpenCode registers. Base URL and transport are set
  * here; the device key travels on each model's Authorization header so an
  * existing user-owned `moris` provider keeps every other setting.
+ * `settings.apiKey: false` completes that contract: the provider carries no
+ * resolvable credential, so OpenCode must keep the static headers as its
+ * authentication instead of failing on a missing one.
  */
 export function providerInfo(options) {
     return {
@@ -134,6 +137,7 @@ export function providerInfo(options) {
             baseURL: options.apiBase,
             // The gateway streams over HTTP only; this is the documented V2 switch.
             transport: 'http',
+            apiKey: false,
             headerTimeout: options.headerTimeoutMs,
             chunkTimeout: options.chunkTimeoutMs,
             timeout: options.requestTimeoutMs,
